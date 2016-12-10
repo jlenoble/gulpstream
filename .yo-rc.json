@@ -1,0 +1,13 @@
+{
+  "generator-wupjs": {
+    "module": "gulpstream",
+    "description": "Modular Gulp",
+    "author": "Jason Lenoble",
+    "email": "jason.lenoble@gmail.com",
+    "github": "jlenoble",
+    "license": "MIT",
+    "transpile": "es2015",
+    "addons": [],
+    "Class": "Gulpstream"
+  }
+}
