@@ -29,21 +29,26 @@
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-preset-es2015": "^6.9.0",
     "chai": "^3.5.0",
+    "chai-as-promised": "^6.0.0",
+    "cleanup-wrapper": "^0.2.1",
     "del": "^2.2.1",
-    "equal-stream-contents": "^0.1.1",
+    "equal-file-contents": "^0.1.5",
+    "equal-stream-contents": "^0.1.3",
     "eslint-config-google": "^0.7.0",
     "gulp": "git://github.com/gulpjs/gulp.git#4.0",
     "gulp-babel": "^6.1.2",
+    "gulp-diff": "^1.0.0",
     "gulp-eslint": "^3.0.1",
     "gulp-mocha": "^2.2.0",
     "gulp-plumber": "^1.1.0",
     "gulp-rename": "^1.2.2",
     "gulp-sourcemaps": "^1.6.0",
-    "muter": "^0.5.0",
+    "muter": "^0.6.0",
     "plumb-gulp": "^0.1.0"
   },
   "dependencies": {
-    "gulpglob": "^0.2.3",
+    "gulpdest": "^0.1.6",
+    "gulpglob": "^0.2.7",
     "polypipe": "^0.2.2"
   }
 }
