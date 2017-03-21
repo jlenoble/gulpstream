@@ -47,8 +47,8 @@
     "plumb-gulp": "^0.1.0"
   },
   "dependencies": {
-    "gulpdest": "^0.1.6",
-    "gulpglob": "^0.2.7",
-    "polypipe": "^0.2.2"
+    "gulpdest": ">=0.2",
+    "gulpglob": ">=0.3",
+    "polypipe": ">=0.2"
   }
 }
