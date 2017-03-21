@@ -1,6 +1,7 @@
 import path from 'path';
 import {expect} from 'chai';
 import Streamer from '../src/streamer';
+import GulpDest from 'gulpdest';
 import {validDests, invalidDests, validGlobs} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
 import equalFileContents from 'equal-file-contents';
@@ -30,6 +31,17 @@ describe('Streamer is a class encapsulting gulp.dest', function () {
         dest,
       }))
         .to.throw(TypeError, /Invalid dest element:/);
+    });
+  });
+
+  it(`A Streamer instance can be initialized from a GulpDest argument`,
+  function () {
+    validDests().forEach(dest => {
+      expect(() => new Streamer({
+        glob: ['src/**/*.js'],
+        dest: new GulpDest(dest),
+      }))
+        .not.to.throw();
     });
   });
 
