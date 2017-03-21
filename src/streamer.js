@@ -2,16 +2,15 @@ import GulpGlob from 'gulpglob';
 import PolyPipe from 'polypipe';
 import GulpDest from 'gulpdest';
 
-const preprocessDest = dest => Array.isArray(dest) ? dest : [dest];
+const preprocess = arg => Array.isArray(arg) ? arg : [arg];
 
 export default class Streamer {
   constructor (options = {}) {
     const {glob, pipe, dest} = options;
 
     const _glob = new GulpGlob(glob);
-    const _pipe = pipe !== undefined ? new PolyPipe(pipe) : null;
-    const _dest = dest !== undefined ? new GulpDest(
-      ...preprocessDest(dest)) : null;
+    const _pipe = pipe !== undefined ? new PolyPipe(...preprocess(pipe)) : null;
+    const _dest = dest !== undefined ? new GulpDest(...preprocess(dest)) : null;
 
     Object.defineProperties(this, {
       _glob: {
@@ -34,6 +33,11 @@ export default class Streamer {
           return _glob.glob;
         },
       },
+      plugin: {
+        get () {
+          return _pipe.plugin.bind(_pipe);
+        },
+      },
       destination: {
         get () {
           return _dest.destination;
@@ -51,10 +55,20 @@ export default class Streamer {
   }
 
   stream () {
-    let stream = this.glob.src();
+    let stream = this._glob.src();
 
-    if (this.pipe) {
-      stream = this.pipe.stream(stream);
+    if (this._pipe) {
+      stream = this._pipe.through(stream);
+    }
+
+    return stream;
+  }
+
+  plugin () {
+    let stream = this._glob.src();
+
+    if (this._pipe) {
+      stream = this._pipe.through(stream);
     }
 
     return stream;

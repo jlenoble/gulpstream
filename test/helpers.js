@@ -1,6 +1,7 @@
 import glob from 'glob';
 import path from 'path';
 import gulp from 'gulp';
+import {Transform} from 'stream';
 import {expect} from 'chai';
 
 export function validGlobs () {
@@ -14,6 +15,17 @@ export function validGlobs () {
     ['gulp/**/*.js', 'src/**/*.js', 'test/**/*.js', '*'],
   ];
 };
+
+export const pipeTestGlobs = [
+  'gulpfile.babel.js',
+  'test/**/*.js',
+  [
+    'gulpfile.babel.js',
+    'test/**/*.js',
+    'gulp/*.js',
+    '!gulp/globs.js',
+  ],
+];
 
 export function validDest (_dest) {
   const dest = path.relative(process.cwd(), _dest);
@@ -70,4 +82,11 @@ export function equalLists (list1, list2) {
   }).catch(err => {
     throw new Error(err);
   });
+};
+
+const DestroyableTransform = gulp.src('*.notfound').constructor;
+
+export function isStream (stream) {
+  return stream instanceof DestroyableTransform ||
+    stream instanceof Transform;
 };
