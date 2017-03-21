@@ -3,6 +3,7 @@ import Muter, {muted} from 'muter';
 import chai, {expect} from 'chai';
 import chaiAsPromised from 'chai-as-promised';
 import Streamer from '../src/streamer';
+import GulpGlob from 'gulpglob';
 import {invalidGlobs, validGlobs, validDest, fileList, fileSrc,
   equalLists} from './helpers';
 import {tmpDir} from 'cleanup-wrapper';
@@ -20,6 +21,14 @@ describe('Streamer is a class encapsulting gulp.src', function () {
     invalidGlobs().forEach(glob => {
       expect(() => new Streamer({glob}))
         .to.throw(TypeError, /Invalid glob element:/);
+    });
+  });
+
+  it(`A Streamer instance can be initialized from a GulpGlob argument`,
+  function () {
+    validGlobs().forEach(glob => {
+      expect(() => new Streamer({glob: new GulpGlob(glob)}))
+        .not.to.throw();
     });
   });
 
