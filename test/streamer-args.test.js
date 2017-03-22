@@ -1,0 +1,57 @@
+import Streamer from '../src/streamer';
+import {validGlobs, validDests} from './helpers';
+import {argsAsListsOfPlugins} from './pipe-helpers';
+import isString from 'is-string';
+import {expect} from 'chai';
+import GulpGlob from 'gulpglob';
+import PolyPipe from 'polypipe';
+import GulpDest from 'gulpdest';
+
+const wrapString = str => {
+  if (isString(str)) {
+    return `'${str}'`;
+  }
+  return str;
+};
+
+const print = arg => {
+  if (!Array.isArray(arg)) {
+    return wrapString(arg);
+  }
+  return `[${arg.map(wrapString).join(',')}]`;
+};
+
+const shuffle = a => {
+  for (let i = a.length; i; i--) {
+    let j = Math.floor(Math.random() * i);
+    [a[i - 1], a[j]] = [a[j], a[i - 1]]; // eslint-disable-line
+  }
+  return a;
+};
+
+describe('Streamer can take mixed args', function () {
+  const globs = validGlobs();
+  const dests = validDests();
+  const plugins = argsAsListsOfPlugins;
+
+  globs.forEach(glob => {
+    dests.forEach(dest => {
+      describe(`Using {glob: ${print(glob)}}, {dest: ${print(dest)}}`,
+      function () {
+        plugins.forEach(plugin => {
+          const pipe = plugin.values;
+
+          it(`and pipe {pipe: [${plugin.description}}]`, function () {
+            const args = shuffle([{glob}, {dest}, {pipe}]);
+
+            const streamer = new Streamer(...args);
+
+            expect(streamer._glob).to.equal(new GulpGlob(glob));
+            expect(streamer._destination).to.equal(new GulpDest(dest));
+            expect(streamer._pipe).to.equal(new PolyPipe(...pipe));
+          });
+        });
+      });
+    });
+  });
+});

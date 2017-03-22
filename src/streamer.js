@@ -3,9 +3,15 @@ import PolyPipe from 'polypipe';
 import GulpDest from 'gulpdest';
 
 const preprocess = arg => Array.isArray(arg) ? arg : [arg];
+const makeOption = arg => {
+  return arg;
+};
 
 export default class Streamer {
-  constructor (options = {}) {
+  constructor (arg1, arg2, arg3) {
+    const options = Object.assign({}, makeOption(arg1), makeOption(arg2),
+      makeOption(arg3));
+
     const {glob, pipe, dest} = options;
 
     const _glob = new GulpGlob(glob);
