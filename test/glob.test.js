@@ -38,7 +38,7 @@ describe('Streamer is a class encapsulting gulp.src', function () {
       const glb = new Streamer({glob});
       expect(glb.glob).to.eql((Array.isArray(glob) ? glob : [glob]).map(
         a => path.relative(process.cwd(), a)
-      ));
+      ).sort().reverse());
       expect(() => {
         glb.glob = 'package.json';
       }).to.throw(TypeError, /Cannot set property glob/);
@@ -52,7 +52,8 @@ describe('Streamer is a class encapsulting gulp.src', function () {
       const src = glb.src();
       const refSrc = fileSrc(glob);
 
-      expect(glb._glob.length).to.equal(1);
+      expect(glb._glob.length)
+        .to.equal(Array.isArray(glob) ? glob.length : 1);
 
       return equalStreamContents(src, refSrc);
     }));
@@ -102,7 +103,7 @@ describe('Streamer is a class encapsulting gulp.src', function () {
           const glb = new Streamer({glob, dest});
           const dst = glb.dest();
 
-          expect(dst.glob).to.eql(destGlb[i]);
+          expect(dst.glob).to.eql(destGlb[i].sort().reverse());
 
           let _glb = glob;
           if (Array.isArray(glob)) {

@@ -100,9 +100,10 @@ describe('Streamer is a class encapsulting gulp.dest', function () {
 
     return glb.toPromise().then(globs => {
       expect(globs.map(glb => glb.glob))
-        .to.eql(dests.map(dest => {
+        .to.eql([dests.map(dest => {
           return join(dest, glob);
-        }));
+        }).reduce((array1, array2) => array1.concat(array2), []).sort()
+          .reverse()]);
     });
   }));
 });
