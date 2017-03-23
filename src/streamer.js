@@ -1,22 +1,58 @@
-import GulpGlob from 'gulpglob';
-import PolyPipe from 'polypipe';
-import GulpDest from 'gulpdest';
+import GulpGlob, {SimpleGulpGlob} from 'gulpglob';
+import PolyPipe, {MonoPipe} from 'polypipe';
+import GulpDest, {SimpleGulpDest} from 'gulpdest';
 
-const preprocess = arg => Array.isArray(arg) ? arg : [arg];
-const makeOption = arg => {
-  return arg;
+const makeArray = arg => Array.isArray(arg) ? arg : [arg];
+
+const findPolyton = (args, Class) => {
+  let res = null;
+
+  args.some(arg => {
+    const elements = arg && arg.elements;
+    res = Array.isArray(elements) ? elements[0] : null;
+    res = res instanceof Class ? arg : null;
+    return res;
+  });
+
+  return res;
+};
+
+const makePolyton = (args, prop) => {
+  let res = null;
+
+  args.some(arg => {
+    const obj = arg && arg[prop];
+
+    if (obj !== undefined) {
+      switch (prop) {
+      case 'glob':
+        res = new GulpGlob(obj);
+        break;
+
+      case 'dest':
+        res = new GulpDest(...makeArray(obj));
+        break;
+
+      case 'pipe':
+        res = new PolyPipe(...makeArray(obj));
+        break;
+      }
+    }
+
+    return res;
+  });
+
+  return res;
 };
 
 export default class Streamer {
-  constructor (arg1, arg2, arg3) {
-    const options = Object.assign({}, makeOption(arg1), makeOption(arg2),
-      makeOption(arg3));
-
-    const {glob, pipe, dest} = options;
-
-    const _glob = new GulpGlob(glob);
-    const _pipe = pipe !== undefined ? new PolyPipe(...preprocess(pipe)) : null;
-    const _dest = dest !== undefined ? new GulpDest(...preprocess(dest)) : null;
+  constructor (...args) {
+    let _glob = findPolyton(args, SimpleGulpGlob) ||
+      makePolyton(args, 'glob');
+    let _pipe = findPolyton(args, MonoPipe) ||
+      makePolyton(args, 'pipe');
+    let _dest = findPolyton(args, SimpleGulpDest) ||
+      makePolyton(args, 'dest');
 
     Object.defineProperties(this, {
       _glob: {

@@ -41,8 +41,29 @@ describe('Streamer can take mixed args', function () {
         plugins.forEach(plugin => {
           const pipe = plugin.values;
 
-          it(`and pipe {pipe: [${plugin.description}}]`, function () {
+          it(`and pipe {pipe: [${plugin.description}]}`, function () {
             const args = shuffle([{glob}, {dest}, {pipe}]);
+
+            const streamer = new Streamer(...args);
+
+            expect(streamer._glob).to.equal(new GulpGlob(glob));
+            expect(streamer._destination).to.equal(new GulpDest(dest));
+            expect(streamer._pipe).to.equal(new PolyPipe(...pipe));
+          });
+        });
+      });
+
+      describe(`Using GulpGlob(${print(glob)}), GulpDest(${print(dest)})`,
+      function () {
+        plugins.forEach(plugin => {
+          const pipe = plugin.values;
+
+          it(`and PolyPipe(${plugin.description})`, function () {
+            const args = shuffle([
+              new GulpGlob(glob),
+              new GulpDest(dest),
+              new PolyPipe(...pipe),
+            ]);
 
             const streamer = new Streamer(...args);
 
