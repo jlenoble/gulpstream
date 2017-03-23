@@ -73,6 +73,27 @@ describe('Streamer can take mixed args', function () {
           });
         });
       });
+
+      describe(`Using mixed ${print(glob)}, mixed ${print(dest)}`,
+      function () {
+        plugins.forEach(plugin => {
+          const pipe = plugin.values;
+
+          it(`and mixed ${plugin.description}`, function () {
+            const args = shuffle([
+              Math.random() < .5 ? new GulpGlob(glob) : {glob},
+              Math.random() < .5 ? new GulpDest(dest) : {dest},
+              Math.random() < .5 ? new PolyPipe(...pipe) : {pipe},
+            ]);
+
+            const streamer = new Streamer(...args);
+
+            expect(streamer._glob).to.equal(new GulpGlob(glob));
+            expect(streamer._destination).to.equal(new GulpDest(dest));
+            expect(streamer._pipe).to.equal(new PolyPipe(...pipe));
+          });
+        });
+      });
     });
   });
 });

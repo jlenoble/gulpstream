@@ -30,6 +30,9 @@ const makePolyton = (args, prop) => {
         break;
 
       case 'dest':
+        if (typeof obj === 'function') {
+          break;
+        }
         res = new GulpDest(...makeArray(obj));
         break;
 
