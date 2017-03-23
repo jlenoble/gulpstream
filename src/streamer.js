@@ -48,14 +48,20 @@ const makePolyton = (args, prop) => {
   return res;
 };
 
+export const makeOptions = args => {
+  const glob = findPolyton(args, SimpleGulpGlob) ||
+    makePolyton(args, 'glob');
+  const pipe = findPolyton(args, MonoPipe) ||
+    makePolyton(args, 'pipe');
+  const dest = findPolyton(args, SimpleGulpDest) ||
+    makePolyton(args, 'dest');
+
+  return {glob, pipe, dest};
+};
+
 export default class Streamer {
   constructor (...args) {
-    let glob = findPolyton(args, SimpleGulpGlob) ||
-      makePolyton(args, 'glob');
-    let pipe = findPolyton(args, MonoPipe) ||
-      makePolyton(args, 'pipe');
-    let dest = findPolyton(args, SimpleGulpDest) ||
-      makePolyton(args, 'dest');
+    const {glob, pipe, dest} = makeOptions(args);
 
     Object.defineProperties(this, {
       _glob: {
