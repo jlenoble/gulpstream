@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "gulpdest": ">=0.3",
-    "gulpglob": ">=0.3",
+    "gulpglob": ">=0.4",
     "polypipe": ">=0.2"
   }
 }
