@@ -5,12 +5,13 @@ import GulpDest, {SimpleGulpDest} from 'gulpdest';
 const makeArray = arg => Array.isArray(arg) ? arg : [arg];
 
 const findPolyton = (args, Class) => {
-  let res = null;
+  let res;
 
   args.some(arg => {
     const elements = arg && arg.elements;
-    res = Array.isArray(elements) ? elements[0] : null;
-    res = res instanceof Class ? arg : null;
+    if (Array.isArray(elements) && elements[0] instanceof Class) {
+      res = arg;
+    }
     return res;
   });
 
@@ -18,7 +19,7 @@ const findPolyton = (args, Class) => {
 };
 
 const makePolyton = (args, prop) => {
-  let res = null;
+  let res;
 
   args.some(arg => {
     const obj = arg && arg[prop];
