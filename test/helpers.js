@@ -28,7 +28,7 @@ export const pipeTestGlobs = [
 ];
 
 export function validDest (_dest) {
-  const dest = path.relative(process.cwd(), _dest);
+  const dest = path.isAbsolute(_dest) ? _dest : path.join(process.cwd(), _dest);
   return validGlobs().map(glb => Array.isArray(glb) ?
     glb.map(g => path.join(dest, path.relative(process.cwd(), g))) :
     [path.join(dest, path.relative(process.cwd(), glb))]);

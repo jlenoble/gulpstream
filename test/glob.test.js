@@ -17,20 +17,28 @@ describe('Streamer is a class encapsulting gulp.src', function () {
   const muter = Muter(console, 'log'); // eslint-disable-line new-cap
 
   it(`A Streamer instance can't be initialized from an invalid glob argument`,
-  function () {
-    invalidGlobs().forEach(glob => {
-      expect(() => new Streamer({glob}))
-        .to.throw(TypeError, /Invalid glob element:/);
+    function () {
+      invalidGlobs().forEach(glob => {
+        expect(() => new Streamer({glob}))
+          .to.throw(TypeError, /Invalid glob element:/);
+      });
     });
-  });
 
   it(`A Streamer instance can be initialized from a GulpGlob argument`,
-  function () {
-    validGlobs().forEach(glob => {
-      expect(() => new Streamer({glob: new GulpGlob(glob)}))
-        .not.to.throw();
+    function () {
+      validGlobs().forEach(glob => {
+        expect(() => new Streamer({glob: new GulpGlob([glob])}))
+          .not.to.throw();
+      });
+
+      validGlobs().forEach(glob => {
+        expect(() => new Streamer(new GulpGlob([glob])))
+          .not.to.throw();
+      });
+
+      expect(() => new Streamer(...validGlobs().map(glob =>
+        new GulpGlob([glob])))).not.to.throw();
     });
-  });
 
   it('A Streamer instance has a non-writable member glob', function () {
     const globs = validGlobs();
@@ -38,10 +46,10 @@ describe('Streamer is a class encapsulting gulp.src', function () {
       const glb = new Streamer({glob});
       expect(glb.glob).to.eql((Array.isArray(glob) ? glob : [glob]).map(
         a => path.relative(process.cwd(), a)
-      ).sort().reverse());
+      ).sort());
       expect(() => {
         glb.glob = 'package.json';
-      }).to.throw(TypeError, /Cannot set property glob/);
+      }).to.throw(TypeError, /Cannot assign to read only property 'glob'/);
     });
   });
 
@@ -52,20 +60,15 @@ describe('Streamer is a class encapsulting gulp.src', function () {
       const src = glb.src();
       const refSrc = fileSrc(glob);
 
-      expect(glb._glob.length)
-        .to.equal(Array.isArray(glob) ? glob.length : 1);
-
       return equalStreamContents(src, refSrc);
     }));
 
     return p.then(() => Promise.all(validGlobs().map(glob => {
       // Pass same valid glob as init arg, but spread in single subglobs
       const glbs = toArrayOfArrays(glob);
-      const glb = new Streamer({glob});
+      const glb = new Streamer(...glbs.map(glob => ({glob})));
       const src = glb.src();
       const refSrc = fileSrc(glob);
-
-      expect(glb.glob.length).to.equal(glbs.length);
 
       return equalStreamContents(src, refSrc);
     })));
@@ -103,7 +106,7 @@ describe('Streamer is a class encapsulting gulp.src', function () {
           const glb = new Streamer({glob, dest});
           const dst = glb.dest();
 
-          expect(dst.glob).to.eql(destGlb[i].sort().reverse());
+          expect(dst.paths).to.eql(destGlb[i].sort());
 
           let _glb = glob;
           if (Array.isArray(glob)) {
@@ -117,7 +120,7 @@ describe('Streamer is a class encapsulting gulp.src', function () {
             try {
               expect(err).to.match(
                 /Cannot delete files\/folders outside the current working directory\. Can be overriden with the `force` option/);
-            } catch(e) {
+            } catch (e) {
               throw err;
             }
           });

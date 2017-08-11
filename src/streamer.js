@@ -1,99 +1,80 @@
 import GulpGlob, {SimpleGulpGlob} from 'gulpglob';
-import PolyPipe, {MonoPipe} from 'polypipe';
 import GulpDest, {SimpleGulpDest} from 'gulpdest';
+import {toArrayOfArrays} from 'argu';
 
-const makeArray = arg => Array.isArray(arg) ? arg : [arg];
+const getGlobArg = arg => {
+  if (arg instanceof SimpleGulpGlob) {
+    return arg;
+  }
 
-const findPolyton = (args, Class) => {
-  let res;
-
-  args.some(arg => {
-    const elements = arg && arg.elements;
-    if (Array.isArray(elements) && elements[0] instanceof Class) {
-      res = arg;
-    }
-    return res;
-  });
-
-  return res;
+  if (arg.glob) {
+    return new GulpGlob(...toArrayOfArrays(arg.glob));
+  }
 };
 
-const makePolyton = (args, prop) => {
-  let res;
+const getDestArg = arg => {
+  if (arg instanceof SimpleGulpDest) {
+    return new GulpDest(arg);
+  }
 
-  args.some(arg => {
-    const obj = arg && arg[prop];
-
-    if (obj !== undefined) {
-      switch (prop) {
-      case 'glob':
-        res = new GulpGlob(obj);
-        break;
-
-      case 'dest':
-        if (typeof obj === 'function') {
-          break;
-        }
-        res = new GulpDest(...makeArray(obj));
-        break;
-
-      case 'pipe':
-        res = new PolyPipe(...makeArray(obj));
-        break;
-      }
-    }
-
-    return res;
-  });
-
-  return res;
+  if (arg.dest && typeof arg.dest !== 'function') {
+    return new GulpDest(arg.dest);
+  }
 };
 
-export const makeOptions = args => {
-  const glob = findPolyton(args, SimpleGulpGlob) ||
-    makePolyton(args, 'glob');
-  const pipe = findPolyton(args, MonoPipe) ||
-    makePolyton(args, 'pipe');
-  const dest = findPolyton(args, SimpleGulpDest) ||
-    makePolyton(args, 'dest');
+const makeOptions = args => {
+  const globs = [];
+  let dest;
 
-  return {glob, pipe, dest};
+  args.forEach(arg => {
+    const glb = getGlobArg(arg);
+
+    if (glb) {
+      globs.push(glb);
+    }
+
+    if (!dest) {
+      dest = getDestArg(arg);
+    }
+  });
+
+  return {
+    glob: new GulpGlob(...globs),
+    dest,
+  };
 };
 
 export default class Streamer {
   constructor (...args) {
-    const {glob, pipe, dest} = makeOptions(args);
+    const {glob, dest} = makeOptions(args);
 
     Object.defineProperties(this, {
       _glob: {
-        get () {
-          return glob;
-        },
+        value: glob,
       },
-      _pipe: {
-        get () {
-          return pipe;
-        },
-      },
+
       _destination: {
-        get () {
-          return dest;
-        },
+        value: dest,
       },
+
+      cwd: {
+        value: glob && glob.cwd,
+      },
+
+      base: {
+        value: glob && glob.base,
+      },
+
+      paths: {
+        value: glob && glob.paths,
+      },
+
       glob: {
-        get () {
-          return glob.glob;
-        },
+        value: glob && glob.glob,
       },
-      plugin: {
-        get () {
-          return pipe.plugin.bind(pipe);
-        },
-      },
+
       destination: {
-        get () {
-          return dest.destination;
-        },
+        value: dest && dest.destination,
       },
     });
   }
@@ -106,26 +87,6 @@ export default class Streamer {
     return this._glob.list();
   }
 
-  stream () {
-    let stream = this._glob.src();
-
-    if (this._pipe) {
-      stream = this._pipe.through(stream);
-    }
-
-    return stream;
-  }
-
-  plugin () {
-    let stream = this._glob.src();
-
-    if (this._pipe) {
-      stream = this._pipe.through(stream);
-    }
-
-    return stream;
-  }
-
   dest () {
     let stream = this._glob.src();
 
@@ -133,6 +94,8 @@ export default class Streamer {
       stream = this._pipe.stream(stream);
     }
 
-    return this._destination.dest(stream, this.glob);
+    return this._destination.dest(stream, {
+      glob: this.glob, cwd: this.cwd, base: this.base,
+    });
   }
 }
