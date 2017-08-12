@@ -1,5 +1,6 @@
 import GulpGlob, {SimpleGulpGlob} from 'gulpglob';
 import GulpDest, {SimpleGulpDest} from 'gulpdest';
+import PolyPipe, {MonoPipe} from 'polypipe';
 import {toArrayOfArrays} from 'argu';
 
 const getGlobArg = arg => {
@@ -9,6 +10,16 @@ const getGlobArg = arg => {
 
   if (arg.glob) {
     return new GulpGlob(...toArrayOfArrays(arg.glob));
+  }
+};
+
+const getPipeArg = arg => {
+  if (arg instanceof MonoPipe) {
+    return arg;
+  }
+
+  if (arg.pipe) {
+    return new PolyPipe(...toArrayOfArrays(arg.pipe));
   }
 };
 
@@ -24,13 +35,19 @@ const getDestArg = arg => {
 
 const makeOptions = args => {
   const globs = [];
+  const pipes = [];
   let dest;
 
   args.forEach(arg => {
     const glb = getGlobArg(arg);
+    const pipe = getPipeArg(arg);
 
     if (glb) {
       globs.push(glb);
+    }
+
+    if (pipe) {
+      pipes.push(pipe);
     }
 
     if (dest === undefined) {
@@ -40,17 +57,22 @@ const makeOptions = args => {
 
   return {
     glob: new GulpGlob(...globs),
+    pipe: pipes.length ? new PolyPipe(...pipes) : undefined,
     dest,
   };
 };
 
 export default class Streamer {
   constructor (...args) {
-    const {glob, dest} = makeOptions(args);
+    const {glob, pipe, dest} = makeOptions(args);
 
     Object.defineProperties(this, {
       _glob: {
         value: glob,
+      },
+
+      _pipe: {
+        value: pipe,
       },
 
       _destination: {
@@ -73,6 +95,10 @@ export default class Streamer {
         value: glob && glob.glob,
       },
 
+      plugin: {
+        value: pipe && pipe.plugin.bind(pipe),
+      },
+
       destination: {
         value: dest && dest.destination,
       },
@@ -85,6 +111,16 @@ export default class Streamer {
 
   list () {
     return this._glob.list();
+  }
+
+  stream () {
+    let stream = this._glob.src();
+
+    if (this._pipe) {
+      stream = this._pipe.through(stream);
+    }
+
+    return stream;
   }
 
   dest () {

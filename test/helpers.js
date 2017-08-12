@@ -23,7 +23,7 @@ export const pipeTestGlobs = [
     'gulpfile.babel.js',
     'test/**/*.js',
     'gulp/*.js',
-    '!gulp/globs.js',
+    // '!gulp/globs.js',
   ],
 ];
 
