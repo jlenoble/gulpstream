@@ -17,7 +17,7 @@ const getDestArg = arg => {
     return new GulpDest(arg);
   }
 
-  if (arg.dest && typeof arg.dest !== 'function') {
+  if (arg.dest !== undefined && typeof arg.dest !== 'function') {
     return new GulpDest(arg.dest);
   }
 };
@@ -33,7 +33,7 @@ const makeOptions = args => {
       globs.push(glb);
     }
 
-    if (!dest) {
+    if (dest === undefined) {
       dest = getDestArg(arg);
     }
   });
