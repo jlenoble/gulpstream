@@ -14,7 +14,7 @@ const getGlobArg = arg => {
 };
 
 const getPipeArg = arg => {
-  if (arg instanceof MonoPipe) {
+  if (arg instanceof MonoPipe || arg instanceof PolyPipe.BasePolyton) {
     return arg;
   }
 
