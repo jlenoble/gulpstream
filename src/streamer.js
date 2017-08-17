@@ -33,7 +33,7 @@ const getDestArg = arg => {
   }
 };
 
-const makeOptions = args => {
+export const makeOptions = args => {
   const globs = [];
   const pipes = [];
   let dest;
