@@ -8,7 +8,7 @@ const getGlobArg = arg => {
     return arg;
   }
 
-  if (arg.glob) {
+  if (arg && arg.glob) {
     return new GulpGlob(...toArrayOfArrays(arg.glob));
   }
 };
@@ -18,7 +18,7 @@ const getPipeArg = arg => {
     return arg;
   }
 
-  if (arg.pipe) {
+  if (arg && arg.pipe) {
     return new PolyPipe(...toArrayOfArrays(arg.pipe));
   }
 };
@@ -28,7 +28,7 @@ const getDestArg = arg => {
     return new GulpDest(arg);
   }
 
-  if (arg.dest !== undefined && typeof arg.dest !== 'function') {
+  if (arg && arg.dest !== undefined && typeof arg.dest !== 'function') {
     return new GulpDest(arg.dest);
   }
 };
