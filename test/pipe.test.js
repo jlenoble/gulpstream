@@ -1,6 +1,5 @@
 import gulp from 'gulp';
-import {expect} from 'chai';
-import {isStream, pipeTestGlobs} from './helpers';
+import {pipeTestGlobs} from './helpers';
 import {allArgs} from './pipe-helpers';
 import equalStreamContents from 'equal-stream-contents';
 
@@ -14,7 +13,6 @@ describe('Streamer is a class encapsulting streams', function () {
           it(`And with glob "${glb}" as init arg`, function () {
             const streamer = args.instantiate(glb);
             const stream = streamer.stream();
-            expect(isStream(stream)).to.be.true;
             return equalStreamContents(stream, args.refStream(glb));
           });
 
