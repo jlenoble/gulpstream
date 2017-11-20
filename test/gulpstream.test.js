@@ -94,14 +94,10 @@ describe('Testing GulpStream', function () {
       }]
     );
 
-    const streamer1 = gulpstream.at(0);
     const streamer2 = gulpstream.at(1);
 
-    if (gulpstream.length === 2) {
-      expect(streamer1).to.equal(streamer2);
-    } else {
-      expect(gulpstream).to.have.length(1);
-      expect(gulpstream.elements).to.have.length(1);
-    }
+    expect(streamer2).to.be.undefined;
+    expect(gulpstream).to.have.length(1);
+    expect(gulpstream.elements).to.have.length(1);
   });
 });
