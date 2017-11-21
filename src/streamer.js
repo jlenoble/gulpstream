@@ -127,7 +127,7 @@ export default class Streamer {
     let stream = this._glob.src();
 
     if (this._pipe) {
-      stream = this._pipe.stream(stream);
+      stream = this._pipe.through(stream);
     }
 
     return this._destination.dest(stream, {
