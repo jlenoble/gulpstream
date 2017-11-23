@@ -1,8 +1,13 @@
 import gulp from 'gulp';
 import babel from 'gulp-babel';
+
 import sourcemaps from 'gulp-sourcemaps';
 
-import {buildDir, allSrcGlob} from './globs';
+const buildDir = 'build';
+const allSrcGlob = [
+  'src/**/*.js',
+  'test/**/*.js'
+];
 
 export const build = () => {
   return gulp.src(allSrcGlob, {

@@ -9,8 +9,42 @@
     "transpile": "es2015",
     "addons": [],
     "Class": "Gulpstream",
-    "updated": 2017,
-    "created": 2016,
-    "year": "2016-2017"
+    "updated": "2017-11-23T13:46:43.097Z",
+    "created": "1970-01-01T00:00:02.016Z",
+    "year": "2016-2017",
+    "devDeps": {
+      "gulp": "git://github.com/gulpjs/gulp.git#4.0",
+      "plumb-gulp": "*",
+      "autoreload-gulp": "*",
+      "gulp-sourcemaps": "*",
+      "del": "*",
+      "gulp-rename": "*",
+      "gulp-replace": "*",
+      "gulp-wrap": "*",
+      "markdown-include": "*",
+      "chai": "*",
+      "gulp-eslint": "*",
+      "eslint-config-google": "*",
+      "gulp-mocha": "*",
+      "muter": "*",
+      "babel-preset-es2015": "*",
+      "babel-plugin-add-module-exports": "*",
+      "gulp-babel": "*"
+    },
+    "genVersion": "0.3.1",
+    "version": "0.0.0",
+    "contributors": [],
+    "keywords": [],
+    "deps": {},
+    "peerDeps": {},
+    "name": "gulpstream",
+    "preprocessors": [],
+    "babel": "es2015",
+    "linters": [
+      "EsLint"
+    ],
+    "testRunners": [
+      "Mocha"
+    ]
   }
 }
