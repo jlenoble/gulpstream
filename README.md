@@ -1,14 +1,12 @@
 # gulpstream
+
 Modular Gulp
 
-## Usage
+  * [License](#license)
 
-```js
-import Gulpstream from 'gulpstream';
-```
 
 ## License
 
 gulpstream is [MIT licensed](./LICENSE).
 
-© 2016-2017 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
+© 1970-2017 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
