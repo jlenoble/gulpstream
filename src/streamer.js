@@ -136,8 +136,10 @@ export default class Streamer {
       stream = this._pipe.through(stream);
     }
 
-    return this._destination.dest(stream, {
-      glob: this.glob, cwd: this.cwd, base: this.base,
-    });
+    if (this._destination) {
+      return this._destination.dest(stream, {
+        glob: this.glob, cwd: this.cwd, base: this.base,
+      });
+    }
   }
 }
