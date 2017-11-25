@@ -105,8 +105,14 @@ export default class Streamer {
     });
   }
 
-  src () {
-    return this._glob.src();
+  src ({read, since} = {read: true}) {
+    const options = {read, since};
+
+    if (since && typeof since === 'string') {
+      options.since = gulp.lastRun(since);
+    }
+
+    return this._glob.src(options);
   }
 
   list () {
