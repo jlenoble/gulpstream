@@ -119,8 +119,8 @@ export default class Streamer {
     return this._glob.list();
   }
 
-  stream () {
-    let stream = this._glob.src();
+  stream (options) {
+    let stream = this._glob.src(options);
 
     if (this._pipe) {
       stream = this._pipe.through(stream);
@@ -129,8 +129,8 @@ export default class Streamer {
     return stream;
   }
 
-  dest () {
-    let stream = this._glob.src();
+  dest (options) {
+    let stream = this._glob.src(options);
 
     if (this._pipe) {
       stream = this._pipe.through(stream);
