@@ -8,7 +8,7 @@ describe('Testing GulpStream', function () {
   const [dest1, dest2] = validDests();
   const [plugin1, plugin2, plugin3] = argsAsListsOfPlugins;
 
-  it(`GulpStream as two Streamers sharing glob`, function () {
+  it(`GulpStream as two Streamers sharing only glob is valid`, function () {
     const gulpstream = new GulpStream(
       [{
         glob: glob1,
@@ -32,8 +32,8 @@ describe('Testing GulpStream', function () {
     expect(streamer1._pipe).not.to.equal(streamer2._pipe);
   });
 
-  it(`GulpStream as two Streamers sharing dest`, function () {
-    const gulpstream = new GulpStream(
+  it(`GulpStream as two Streamers sharing only dest is invalid`, function () {
+    expect(() => new GulpStream(
       [{
         glob: glob1,
         dest: dest1,
@@ -44,20 +44,11 @@ describe('Testing GulpStream', function () {
         dest: dest1,
         pipe: plugin3.values,
       }]
-    );
-
-    const streamer1 = gulpstream.at(0);
-    const streamer2 = gulpstream.at(1);
-
-    expect(streamer1).not.to.equal(streamer2);
-
-    expect(streamer1._glob).not.to.equal(streamer2._glob);
-    expect(streamer1._destination).to.equal(streamer2._destination);
-    expect(streamer1._pipe).not.to.equal(streamer2._pipe);
+    )).to.throw(Error, 'Glob mismatch');
   });
 
-  it(`GulpStream as two Streamers sharing pipe`, function () {
-    const gulpstream = new GulpStream(
+  it(`GulpStream as two Streamers sharing only pipe is invalid`, function () {
+    expect(() => new GulpStream(
       [{
         glob: glob1,
         dest: dest1,
@@ -68,19 +59,10 @@ describe('Testing GulpStream', function () {
         dest: dest2,
         pipe: plugin2.values,
       }]
-    );
-
-    const streamer1 = gulpstream.at(0);
-    const streamer2 = gulpstream.at(1);
-
-    expect(streamer1).not.to.equal(streamer2);
-
-    expect(streamer1._glob).not.to.equal(streamer2._glob);
-    expect(streamer1._destination).not.to.equal(streamer2._destination);
-    expect(streamer1._pipe).to.equal(streamer2._pipe);
+    )).to.throw(Error, 'Glob mismatch');
   });
 
-  it(`GulpStream as two Streamers sharing all`, function () {
+  it(`GulpStream as two Streamers sharing all is valid`, function () {
     const gulpstream = new GulpStream(
       [{
         glob: glob1,
