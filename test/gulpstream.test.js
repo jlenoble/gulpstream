@@ -16,6 +16,7 @@ describe('Testing GulpStream', function () {
         pipe: plugin1.values,
       }],
       [{
+        mode: 'other',
         glob: glob1,
         dest: dest2,
         pipe: plugin3.values,
@@ -40,6 +41,7 @@ describe('Testing GulpStream', function () {
         pipe: plugin1.values,
       }],
       [{
+        mode: 'other',
         glob: glob2,
         dest: dest1,
         pipe: plugin3.values,
@@ -55,6 +57,7 @@ describe('Testing GulpStream', function () {
         pipe: plugin2.values,
       }],
       [{
+        mode: 'other',
         glob: glob2,
         dest: dest2,
         pipe: plugin2.values,
@@ -62,8 +65,8 @@ describe('Testing GulpStream', function () {
     )).to.throw(Error, 'Glob mismatch');
   });
 
-  it(`GulpStream as two Streamers sharing all is valid`, function () {
-    const gulpstream = new GulpStream(
+  it(`GulpStream as two Streamers sharing all is invalid`, function () {
+    expect(() => new GulpStream(
       [{
         glob: glob1,
         dest: dest1,
@@ -74,12 +77,41 @@ describe('Testing GulpStream', function () {
         dest: dest1,
         pipe: plugin2.values,
       }]
-    );
-
-    const streamer2 = gulpstream.at(1);
-
-    expect(streamer2).to.be.undefined;
-    expect(gulpstream).to.have.length(1);
-    expect(gulpstream.elements).to.have.length(1);
+    )).to.throw(Error, `Mode already set: 'default'`);
   });
+
+  it(`GulpStream as two Streamers sharing all but mode is invalid`,
+    function () {
+      expect(() => new GulpStream(
+        [{
+          glob: glob1,
+          dest: dest1,
+          pipe: plugin2.values,
+        }],
+        [{
+          mode: 'other',
+          glob: glob1,
+          dest: dest1,
+          pipe: plugin2.values,
+        }]
+      )).to.throw(Error, `Init Streamer args cannot only differ by 'mode'`);
+    });
+
+  it(`GulpStream as two Streamers with no default mode is invalid`,
+    function () {
+      expect(() => new GulpStream(
+        [{
+          mode: 'other1',
+          glob: glob1,
+          dest: dest1,
+          pipe: plugin1.values,
+        }],
+        [{
+          mode: 'other2',
+          glob: glob1,
+          dest: dest2,
+          pipe: plugin3.values,
+        }]
+      )).to.throw(Error, `No 'default' mode set`);
+    });
 });
