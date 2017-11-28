@@ -97,6 +97,42 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
           return this[_streamer];
         },
       },
+
+      cwd: {
+        get () {
+          return this[_streamer].cwd;
+        },
+      },
+
+      base: {
+        get () {
+          return this[_streamer].base;
+        },
+      },
+
+      paths: {
+        get () {
+          return this[_streamer].paths;
+        },
+      },
+
+      glob: {
+        get () {
+          return this[_streamer].glob;
+        },
+      },
+
+      plugin: {
+        get () {
+          return this[_streamer].plugin;
+        },
+      },
+
+      destination: {
+        get () {
+          return this[_streamer].destination;
+        },
+      },
     },
 
     postprocess (instance, args) {
@@ -121,6 +157,26 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
         } else {
           throw new TypeError('Mode must be set with a string');
         }
+      },
+
+      src (options = {read: true, mode: 'default'}) {
+        this.setMode(options.mode);
+        return this[_streamer].src(options);
+      },
+
+      list () {
+        this.setMode('default');
+        return this[_streamer].list();
+      },
+
+      stream (options = {read: true, mode: 'default'}) {
+        this.setMode(options.mode);
+        return this[_streamer].stream(options);
+      },
+
+      dest (options = {read: true, mode: 'default'}) {
+        this.setMode(options.mode);
+        return this[_streamer].dest(options);
       },
     },
   });
