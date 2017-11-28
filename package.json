@@ -25,18 +25,18 @@
   },
   "homepage": "https://github.com/jlenoble/gulpstream#readme",
   "dependencies": {
-    "gulpdest": "^0.5.0",
-    "gulpglob": "^0.6.3",
-    "polypipe": "^0.2.5"
+    "gulpdest": "^0.5.1",
+    "gulpglob": "^0.6.5",
+    "polypipe": "^0.2.7"
   },
   "devDependencies": {
-    "autoreload-gulp": "*",
+    "autoreload-gulp": "^0.3.0",
     "babel-core": "^6.26.0",
     "babel-plugin-add-module-exports": "*",
     "babel-preset-env": "^1.6.1",
-    "chai": "*",
+    "chai": "^4.1.2",
     "chai-as-promised": "^7.1.1",
-    "cleanup-wrapper": "^0.2.3",
+    "cleanup-wrapper": "^0.3.0",
     "del": "*",
     "equal-file-contents": "^0.1.5",
     "equal-stream-contents": "^0.1.3",
@@ -47,7 +47,7 @@
     "gulp-mocha": "*",
     "gulp-rename": "*",
     "gulp-replace": "*",
-    "gulp-sourcemaps": "*",
+    "gulp-sourcemaps": "^2.6.1",
     "gulp-wrap": "*",
     "markdown-include": "*",
     "muter": "*",
