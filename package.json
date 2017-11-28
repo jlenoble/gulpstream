@@ -51,7 +51,8 @@
     "gulp-wrap": "*",
     "markdown-include": "*",
     "muter": "*",
-    "plumb-gulp": "*"
+    "plumb-gulp": "*",
+    "test-gulp-process": "^0.2.0"
   },
   "peerDependencies": {}
 }
