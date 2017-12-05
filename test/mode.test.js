@@ -17,12 +17,9 @@ describe(`Testing mode switch for GulpStream`, function () {
     new GulpDest(dest2)];
   const o3 = ['other2', new GulpGlob(glob1), new PolyPipe(...plugin3.values),
     new GulpDest(dest2)];
-  const o4 = ['other3', new GulpGlob(glob1), new PolyPipe(...plugin3.values),
-    new GulpDest(dest2)];
 
   it(`Checking streamers don't already exist from another test`, function () {
     expect(GulpStream.get(o1, o2, o3)).to.be.undefined;
-    expect(GulpStream.get(o1, o2, o4)).to.be.undefined;
   });
 
   it(`On init, mode is 'default'`, function () {
