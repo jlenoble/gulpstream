@@ -1,5 +1,7 @@
 import Streamer, {makeOptions} from './streamer';
 import {PolytonFactory} from 'polyton';
+import PolyPipe from 'polypipe';
+import {noop} from 'gulp-util';
 import {unequiv} from 'keyfunc';
 
 const uneq = unequiv({
@@ -43,6 +45,10 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
 
         if (pipe && !_pipe) {
           _pipe = pipe;
+        }
+
+        if (!_pipe) {
+          _pipe = new PolyPipe([noop]);
         }
 
         if (dest && !_dest) {
