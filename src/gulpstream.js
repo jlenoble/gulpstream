@@ -12,6 +12,8 @@ const uneq = unequiv({
   }],
 });
 
+const emptyDest = {};
+
 const _mode = Symbol();
 const _streamer = Symbol();
 const _streamers = Symbol();
@@ -53,6 +55,10 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
 
         if (dest && !_dest) {
           _dest = dest;
+        }
+
+        if (!_dest) {
+          _dest = emptyDest;
         }
 
         if (modes[mode]) {
