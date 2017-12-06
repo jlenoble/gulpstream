@@ -194,4 +194,4 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
   });
 
 export default GulpStream;
-export {Streamer};
+export {Streamer, makeOptions};
