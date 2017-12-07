@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/jlenoble/gulpstream#readme",
   "dependencies": {
-    "gulpdest": "^0.6.2",
+    "gulpdest": "^0.6.4",
     "gulpglob": "^0.7.0",
     "polypipe": "^0.2.7"
   },
