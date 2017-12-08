@@ -147,13 +147,14 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
     },
 
     postprocess (instance, args) {
-      instance[_streamers] = {}; // eslint-disable-line no-param-reassign
-
+      /* eslint-disable no-param-reassign */
+      instance[_streamers] = {};
       instance.forEach(p => {
-        instance[_streamers][p.mode] = p; // eslint-disable-line no-param-reassign, max-len
+        instance[_streamers][p.mode] = p;
       });
-      instance[_streamer] = instance[_streamers][instance[_mode]]; // eslint-disable-line no-param-reassign, max-len
+      instance[_streamer] = instance[_streamers][instance[_mode]];
       return instance;
+      /* eslint-enable no-param-reassign */
     },
 
     extend: {
