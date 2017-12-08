@@ -94,9 +94,8 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
         writable: true,
       },
 
-      [_streamers]: {
-        value: {},
-      },
+      // [_streamers] is defined in postprocess as it is an object, and defined
+      // here it would be shared across all instances
 
       mode: {
         get () {
@@ -148,6 +147,8 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
     },
 
     postprocess (instance, args) {
+      instance[_streamers] = {}; // eslint-disable-line no-param-reassign
+
       instance.forEach(p => {
         instance[_streamers][p.mode] = p; // eslint-disable-line no-param-reassign, max-len
       });
