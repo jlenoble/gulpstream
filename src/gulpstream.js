@@ -159,17 +159,15 @@ const GulpStream = PolytonFactory( // eslint-disable-line new-cap
 
     extend: {
       setMode (mode) {
-        if (typeof mode === 'string') {
-          const strm = this[_streamers][mode];
+        const md = typeof mode === 'string' ? mode : 'default';
+        const strm = this[_streamers][md];
 
-          if (strm) {
-            this[_mode] = mode;
-            this[_streamer] = strm;
-          } else {
-            throw new Error(`Mode ${mode} is undefined`);
-          }
+        if (strm) {
+          this[_mode] = md;
+          this[_streamer] = strm;
         } else {
-          throw new TypeError('Mode must be set with a string');
+          this[_mode] = 'default';
+          this[_streamer] = this[_streamers]['default'];
         }
       },
 
