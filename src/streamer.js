@@ -126,8 +126,8 @@ export default class Streamer {
     });
   }
 
-  src ({read, since} = {read: true}) {
-    const options = {read, since};
+  src ({read, since, base} = {read: true}) {
+    const options = {read, since, base};
 
     if (since && typeof since === 'string') {
       options.since = gulp.lastRun(since);
