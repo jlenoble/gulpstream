@@ -55,4 +55,4 @@ Method `setMode(mode)` allows to change `mode`. Mode is changed implicitly is yo
 
 gulpstream is [MIT licensed](./LICENSE).
 
-© 1970-2017 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
+© 2016-2018 [Jason Lenoble](mailto:jason.lenoble@gmail.com)
